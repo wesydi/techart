@@ -1,18 +1,18 @@
-.questions {
+.main {
     width: 300px;
     border: 1px solid black;
 }
-.questions__header {
+.main__header {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 50px;
     background-color: #eeeeee;
 }
-.questions_question {
+.main_question {
     color: #514d86;
 }
-.questions__answer {
+.main__answer {
     text-decoration: underline;
     color: #509d4f;
     cursor: pointer;
