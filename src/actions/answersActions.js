@@ -1,8 +1,7 @@
-const answersActions = (question, answer) => {
+const answersActions = (dispatch) => {
     return {
-        type: 'ADD_ANSWER',
-        question,
-        answer
+        addAnswer: (question, answer) => dispatch({type: 'ADD_ANSWER', question, answer}),
+        clearAnswers: () => dispatch({type: 'CLEAR_ANSWERS'})
     }
 };
 

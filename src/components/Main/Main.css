@@ -17,3 +17,14 @@
     color: #509d4f;
     cursor: pointer;
 }
+.inputBlock {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 20px 0;
+}
+.inputBlock__divider {
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+}
