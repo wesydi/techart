@@ -9,7 +9,6 @@ const Main = (props) => {
   } = props;
   const render = () => {
     if (summary) {
-      console.log(summary);
       return (
         <span className={`main__text ${summary.result === 'error' ? 'main__text_error' : null}`}>{summary.message}</span>
       );
@@ -35,7 +34,7 @@ const Main = (props) => {
         <div className="inputBlock">
           {answers.map((answer, index) => (
             <>
-              <Input handleChangeInput={handleChangeInput} name={answer} type="number" min={1} key={answer} />
+              <Input handleChangeInput={handleChangeInput} name={answer} type="number" min={1} pattern="[0-9]*" />
               {index !== answers.length - 1 ? <span className="inputBlock__divider">X</span> : null}
             </>
           ))}
@@ -72,14 +71,14 @@ Main.defaultProps = {
 };
 
 Main.propTypes = {
-  answers: PropTypes.array || PropTypes.objectOf(PropTypes.object),
+  answers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   currentQuestion: PropTypes.shape({
     type: PropTypes.string,
     name: PropTypes.string,
     question: PropTypes.string,
-    answers: PropTypes.array || PropTypes.objectOf(PropTypes.object),
+    answers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   }),
-  summary: PropTypes.object || PropTypes.instanceOf(null),
+  summary: PropTypes.oneOfType([PropTypes.object, PropTypes.instanceOf(null)]),
   handleClick: PropTypes.func,
   handleChangeInput: PropTypes.func,
 };

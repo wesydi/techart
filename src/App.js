@@ -61,7 +61,7 @@ const App = (props) => {
         });
         changeResult(response.data);
       } catch (error) {
-        changeResult({ result: 'error', message: 'Возникли проблемы с соединением.' });
+        changeResult({ result: 'error', message: 'Что-то пошло не так' });
       }
     }
   }, [answers, isLast]);
@@ -87,12 +87,12 @@ const App = (props) => {
       changeIsLast(true);
       return;
     }
-    changeCurrentMove(currentMove + 1);
     if (currentQuestion.name === 'building' && answer === 2) {
       changeIndexQuestion(indexQuestion + 2);
-      return;
+    } else {
+      changeIndexQuestion(indexQuestion + 1);
     }
-    changeIndexQuestion(indexQuestion + 1);
+    changeCurrentMove(currentMove + 1);
     changeInputValues({});
   };
 
@@ -112,7 +112,7 @@ const App = (props) => {
   return (
     <div className="app">
       <h3>Калькулятор цены конструкций</h3>
-      <span className="move">Шаг {currentMove}</span>
+      <span className="move">{result ? 'Результат рассчета' : `Шаг ${currentMove}`}</span>
       <Main summary={result} handleChangeInput={handleChangeInput} handleClick={handleClick} currentQuestion={currentQuestion} answers={questions[indexQuestion].name === 'material' ? currentQuestion.answers[answers.building] : currentQuestion.answers} />
       <div className="buttons">
         {result ? <Button text="Новый расчет" handleClick={() => clear()} /> : (
@@ -132,7 +132,7 @@ App.defaultProps = {
 };
 
 App.propTypes = {
-  answers: PropTypes.array || PropTypes.objectOf(PropTypes.object),
+  answers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   dispatch: PropTypes.func,
 };
 

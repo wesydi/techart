@@ -4,11 +4,11 @@ import './Input.css';
 
 const Input = (props) => {
   const {
-    handleChangeInput, type, min, name,
+    handleChangeInput, type, min, name, pattern,
   } = props;
 
   return (
-    <input className="input" onChange={(event) => handleChangeInput(event.target)} type={type} min={min} data-name={name} />
+    <input className="input" onChange={(event) => handleChangeInput(event.target)} type={type} min={min} data-name={name} pattern={pattern} />
   );
 };
 
@@ -17,6 +17,7 @@ Input.defaultProps = {
   type: '',
   min: 0,
   name: '',
+  pattern: '',
 };
 
 Input.propTypes = {
@@ -24,6 +25,7 @@ Input.propTypes = {
   type: PropTypes.string,
   min: PropTypes.number,
   name: PropTypes.string,
+  pattern: PropTypes.string,
 };
 
 export default Input;
