@@ -5,15 +5,21 @@ import './Main.css';
 
 const Main = (props) => {
   const {
-    currentQuestion, answers, handleClick, handleChangeInput,
+    currentQuestion, answers, handleClick, handleChangeInput, summary,
   } = props;
   const render = () => {
+    if (summary) {
+      console.log(summary);
+      return (
+        <span className={`main__text ${summary.result === 'error' ? 'main__text_error' : null}`}>{summary.message}</span>
+      );
+    }
     if (currentQuestion.type === 'list') {
       return (
         <ul
           className="main__list"
           onClick={(event) => {
-            handleClick(event.target.getAttribute('data-value'), event.currentTarget);
+            handleClick(Number(event.target.getAttribute('data-value')), event.currentTarget);
           }}
         >
           {Object.keys(answers).map((key) => (
@@ -24,22 +30,31 @@ const Main = (props) => {
         </ul>
       );
     }
-    return (
-      <div className="inputBlock">
-        {answers.map((answer, index) => (
-          <>
-            <Input handleChangeInput={handleChangeInput} name={answer} type="number" min={1} key={answer} />
-            {index !== answers.length - 1 ? <span className="inputBlock__divider">X</span> : null}
-          </>
-        ))}
-      </div>
-    );
+    if (currentQuestion.type === 'input') {
+      return (
+        <div className="inputBlock">
+          {answers.map((answer, index) => (
+            <>
+              <Input handleChangeInput={handleChangeInput} name={answer} type="number" min={1} key={answer} />
+              {index !== answers.length - 1 ? <span className="inputBlock__divider">X</span> : null}
+            </>
+          ))}
+        </div>
+      );
+    }
+  };
+
+  const getHeaderText = () => {
+    if (summary) {
+      return summary.result === 'ok' ? 'Успешно' : 'Ошибка';
+    }
+    return currentQuestion.question;
   };
 
   return (
     <div className="main">
       <div className="main__header">
-        <span className="main_question">{currentQuestion.question}</span>
+        <span className="main__text">{getHeaderText()}</span>
       </div>
       <div className="main__answers">
         {render()}
@@ -53,6 +68,7 @@ Main.defaultProps = {
   currentQuestion: {},
   handleClick: () => {},
   handleChangeInput: () => {},
+  summary: null,
 };
 
 Main.propTypes = {
@@ -63,6 +79,7 @@ Main.propTypes = {
     question: PropTypes.string,
     answers: PropTypes.array || PropTypes.objectOf(PropTypes.object),
   }),
+  summary: PropTypes.object || PropTypes.instanceOf(null),
   handleClick: PropTypes.func,
   handleChangeInput: PropTypes.func,
 };

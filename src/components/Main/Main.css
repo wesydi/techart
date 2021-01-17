@@ -1,5 +1,5 @@
 .main {
-    width: 300px;
+    min-width: 300px;
     border: 1px solid black;
 }
 .main__header {
@@ -9,8 +9,15 @@
     height: 50px;
     background-color: #eeeeee;
 }
-.main_question {
+.main__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
     color: #514d86;
+}
+.main__text_error {
+    color: red;
 }
 .main__answer {
     text-decoration: underline;

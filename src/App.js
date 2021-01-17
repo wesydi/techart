@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './App.css';
@@ -49,11 +50,27 @@ const App = (props) => {
   const [currentMove, changeCurrentMove] = useState(1);
   const [indexQuestion, changeIndexQuestion] = useState(0);
   const [inputValues, changeInputValues] = useState({});
+  const [isLast, changeIsLast] = useState(false);
+  const [result, changeResult] = useState(null);
+
+  useEffect(async () => {
+    if (isLast) {
+      try {
+        const response = await axios.get('https://data.techart.ru/lab/json/', {
+          params: answers,
+        });
+        changeResult(response.data);
+      } catch (error) {
+        changeResult({ result: 'error', message: 'Возникли проблемы с соединением.' });
+      }
+    }
+  }, [answers, isLast]);
+
   const currentQuestion = questions[indexQuestion];
 
   const checkOnDisabled = () => {
     if (currentQuestion.type === 'list') return true;
-    const filledInputValues = Object.keys(inputValues).filter((key) => inputValues[key].trim().length > 0);
+    const filledInputValues = Object.keys(inputValues).filter((key) => String(inputValues[key]) > 0);
     return currentQuestion.answers.length !== filledInputValues.length;
   };
 
@@ -67,10 +84,11 @@ const App = (props) => {
       answersActions(dispatch).addAnswer(currentQuestion.name, answer);
     }
     if (indexQuestion === questions.length - 1) {
+      changeIsLast(true);
       return;
     }
     changeCurrentMove(currentMove + 1);
-    if (currentQuestion.name === 'building' && answer === '2') {
+    if (currentQuestion.name === 'building' && answer === 2) {
       changeIndexQuestion(indexQuestion + 2);
       return;
     }
@@ -79,28 +97,30 @@ const App = (props) => {
   };
 
   const handleChangeInput = (target) => {
-    changeInputValues({ ...inputValues, [target.getAttribute('data-name')]: target.value });
+    changeInputValues({ ...inputValues, [target.getAttribute('data-name')]: Number(target.value) });
+  };
+
+  const clear = () => {
+    answersActions(dispatch).clearAnswers();
+    changeCurrentMove(1);
+    changeIndexQuestion(0);
+    changeInputValues({});
+    changeIsLast(false);
+    changeResult(null);
   };
 
   return (
     <div className="app">
       <h3>Калькулятор цены конструкций</h3>
-      <span className="move">
-        Шаг
-        {currentMove}
-      </span>
-      <Main handleChangeInput={handleChangeInput} handleClick={handleClick} currentQuestion={currentQuestion} answers={questions[indexQuestion].name === 'material' ? currentQuestion.answers[answers.building] : currentQuestion.answers} />
+      <span className="move">Шаг {currentMove}</span>
+      <Main summary={result} handleChangeInput={handleChangeInput} handleClick={handleClick} currentQuestion={currentQuestion} answers={questions[indexQuestion].name === 'material' ? currentQuestion.answers[answers.building] : currentQuestion.answers} />
       <div className="buttons">
-        <Button
-          handleClick={() => {
-            answersActions(dispatch).clearAnswers();
-            changeCurrentMove(1);
-            changeIndexQuestion(0);
-            changeInputValues({});
-          }}
-          text="Отмена"
-        />
-        <Button handleClick={(event) => handleClick(null, event.currentTarget)} disabled={checkOnDisabled()} text={currentQuestion === questions[questions.length - 1] ? 'Результат' : 'Далее'} />
+        {result ? <Button text="Новый расчет" handleClick={() => clear()} /> : (
+          <>
+            <Button handleClick={() => clear()} text="Отмена" />
+            <Button handleClick={(event) => handleClick(null, event.currentTarget)} disabled={checkOnDisabled()} text={currentQuestion === questions[questions.length - 1] ? 'Результат' : 'Далее'} />
+          </>
+        )}
       </div>
     </div>
   );
