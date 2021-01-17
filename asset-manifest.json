@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/techart/static/css/main.093a42cb.chunk.css",
-    "main.js": "/techart/static/js/main.f28c476d.chunk.js",
-    "main.js.map": "/techart/static/js/main.f28c476d.chunk.js.map",
+    "main.js": "/techart/static/js/main.871ef7e7.chunk.js",
+    "main.js.map": "/techart/static/js/main.871ef7e7.chunk.js.map",
     "runtime-main.js": "/techart/static/js/runtime-main.35be59ab.js",
     "runtime-main.js.map": "/techart/static/js/runtime-main.35be59ab.js.map",
     "static/js/2.3f0f718a.chunk.js": "/techart/static/js/2.3f0f718a.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.35be59ab.js",
     "static/js/2.3f0f718a.chunk.js",
     "static/css/main.093a42cb.chunk.css",
-    "static/js/main.f28c476d.chunk.js"
+    "static/js/main.871ef7e7.chunk.js"
   ]
 }
